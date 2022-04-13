@@ -1,1 +1,2 @@
 export * from './ModelInterface';
+export * from './VehicleInterface';
