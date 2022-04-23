@@ -1,4 +1,10 @@
-import { Car, CarResponse, HttpResponse, Service } from '../interfaces';
+import {
+  Car,
+  CarResponse,
+  ErrorResponse,
+  HttpResponse,
+  Service,
+} from '../interfaces';
 import { CarModel } from '../models';
 
 export default class CarService implements Service<Car, CarResponse> {
@@ -10,7 +16,11 @@ export default class CarService implements Service<Car, CarResponse> {
 
   get model() { return this.$model; }
 
-  async create(body: Car): Promise<HttpResponse<CarResponse>> {
+  async create(body: Car): Promise<HttpResponse<CarResponse | ErrorResponse>> {
+    if (!body) {
+      return { statusCode: 400, body: { message: 'Has no data in request' } };
+    }
+
     const createdCar = await this.model.create(body);
 
     return { statusCode: 201, body: createdCar };
@@ -22,14 +32,24 @@ export default class CarService implements Service<Car, CarResponse> {
     return { statusCode: 200, body: allCars };
   }
 
-  async readOne(id: string): Promise<HttpResponse<CarResponse | null>> {
+  async readOne(
+    id: string,
+  ): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     const car = await this.model.readOne(id);
+
+    if (!car) {
+      return { statusCode: 404, body: { message: 'Has no car with this id' } };
+    }
 
     return { statusCode: 200, body: car };
   }
 
-  async delete(id: string): Promise<HttpResponse<CarResponse | null>> {
+  async delete(id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     const deletedCar = await this.model.delete(id);
+
+    if (!deletedCar) {
+      return { statusCode: 404, body: { message: 'Has no car with this id' } };
+    }
 
     return { statusCode: 200, body: deletedCar };
   }
@@ -37,8 +57,12 @@ export default class CarService implements Service<Car, CarResponse> {
   async update(
     body: Car,
     id: string,
-  ): Promise<HttpResponse<CarResponse | null>> {
+  ): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     const updatedCar = await this.model.update(id, body);
+
+    if (!updatedCar) {
+      return { statusCode: 404, body: { message: 'Has no car with this id' } };
+    }
 
     return { statusCode: 200, body: updatedCar };
   }
