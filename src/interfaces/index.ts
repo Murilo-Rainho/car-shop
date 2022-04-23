@@ -1,4 +1,5 @@
 export * from './CarInterface';
+export * from './CarResponseInterface';
 export * from './ControllerInterface';
 export * from './HttpResponse';
 export * from './ModelInterface';
