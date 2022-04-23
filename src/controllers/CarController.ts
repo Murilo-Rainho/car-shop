@@ -8,6 +8,7 @@ export default class CarController implements Controller<CarResponse> {
   private $service: CarService;
 
   constructor(
+    service = new CarService(),
     route = '/cars',
   ) {
     this.read = this.read.bind(this);
@@ -17,7 +18,7 @@ export default class CarController implements Controller<CarResponse> {
     this.update = this.update.bind(this);
 
     this.$route = route;
-    this.$service = new CarService();
+    this.$service = service;
   }
 
   get route() { return this.$route; }
