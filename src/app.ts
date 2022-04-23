@@ -1,12 +1,18 @@
-import express, { Router } from 'express';
+import express from 'express';
 import connectToDatabase from './connection';
+import { CarRouter } from './routers';
 
 class App {
   public app: express.Application;
 
-  constructor() {
+  constructor(
+    private carRouter = new CarRouter(),
+  ) {
     this.app = express();
     this.app.use(express.json());
+
+    this.app.get('/ping', (_req, res) => res.status(200).json('pong'));
+    this.addRouters();
   }
 
   public startServer(PORT: string | number = 3001): void {
@@ -17,8 +23,8 @@ class App {
     );
   }
 
-  public addRouter(router: Router) {
-    this.app.use(router);
+  public addRouters() {
+    this.app.use('/cars', this.carRouter.router);
   }
 
   public getApp() {
