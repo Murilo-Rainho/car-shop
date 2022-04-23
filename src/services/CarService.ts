@@ -59,13 +59,17 @@ export default class CarService implements Service<Car, CarResponse> {
   }
 
   async delete(id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
+    const { message: isNotValid } = idValidator({ _id: id });
+
+    if (isNotValid) return { statusCode: 400, body: { error: isNotValid } };
+
     const deletedCar = await this.model.delete(id);
 
     if (!deletedCar) {
       return { statusCode: 404, body: { error: notFound } };
     }
 
-    return { statusCode: 200, body: deletedCar };
+    return { statusCode: 204, body: deletedCar };
   }
 
   async update(

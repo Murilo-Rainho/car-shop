@@ -74,6 +74,7 @@ export default class CarController implements Controller<CarResponse> {
   ): Promise<Res<CarResponse | null> | void> {
     try {
       const { id } = req.params;
+      
       const { body, statusCode } = await this.service.delete(id);
 
       return res.status(statusCode).json(body);
