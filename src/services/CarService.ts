@@ -76,6 +76,10 @@ export default class CarService implements Service<Car, CarResponse> {
     body: Car,
     id: string,
   ): Promise<HttpResponse<CarResponse | ErrorResponse>> {
+    const { message: isNotValid } = idValidator({ _id: id });
+
+    if (isNotValid) return { statusCode: 400, body: { error: isNotValid } };
+
     const updatedCar = await this.model.update(id, body);
 
     if (!updatedCar) {
