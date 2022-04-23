@@ -30,9 +30,9 @@ export default class CarController implements Controller<CarResponse> {
     next: Next,
   ): Promise<Res<CarResponse> | void> {
     try {
-      const createdCar = await this.service.create(req.body);
+      const { body, statusCode } = await this.service.create(req.body);
   
-      return res.status(201).json(createdCar);
+      return res.status(statusCode).json(body);
     } catch (error) {
       next(error);
     }
@@ -44,9 +44,9 @@ export default class CarController implements Controller<CarResponse> {
     next: Next,
   ): Promise<Res<CarResponse[]> | void> {
     try {
-      const allCars = await this.service.read();
+      const { body, statusCode } = await this.service.read();
 
-      return res.status(200).json(allCars);
+      return res.status(statusCode).json(body);
     } catch (error) {
       next(error);
     }
@@ -59,11 +59,9 @@ export default class CarController implements Controller<CarResponse> {
   ): Promise<Res<CarResponse | null> | void> {
     try {
       const { id } = req.params;
-      const car = await this.service.readOne(id);
+      const { body, statusCode } = await this.service.readOne(id);
 
-      if (!car) return res.status(404).json(null);
-
-      return res.status(200).json(car);
+      return res.status(statusCode).json(body);
     } catch (error) {
       next(error);
     }
@@ -76,9 +74,9 @@ export default class CarController implements Controller<CarResponse> {
   ): Promise<Res<CarResponse | null> | void> {
     try {
       const { id } = req.params;
-      const deletedCar = await this.service.delete(id);
+      const { body, statusCode } = await this.service.delete(id);
 
-      return res.status(200).json(deletedCar);
+      return res.status(statusCode).json(body);
     } catch (error) {
       next(error);
     }
@@ -90,10 +88,10 @@ export default class CarController implements Controller<CarResponse> {
     next: Next,
   ): Promise<Res<CarResponse | null> | void> {
     try {
-      const { body, params: { id } } = req;
-      const updatedCar = await this.service.update(body, id);
+      const { body: reqBody, params: { id } } = req;
+      const { body, statusCode } = await this.service.update(reqBody, id);
   
-      return res.status(200).json(updatedCar);
+      return res.status(statusCode).json(body);
     } catch (error) {
       next(error);
     }
