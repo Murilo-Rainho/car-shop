@@ -1,2 +1,2 @@
 export { default as errorMessages } from './errorMessages';
-export const lint = () => {};
+export { default as carValidator } from './carValidator';
