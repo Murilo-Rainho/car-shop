@@ -6,10 +6,10 @@ import {
   Service,
 } from '../interfaces';
 import { CarModel } from '../models';
-import { carValidator, errorMessages } from '../utils';
+import { carValidator, errorMessages, idValidator } from '../utils';
 
 const {
-  carNotFound,
+  notFound,
   withoutBody,
 } = errorMessages;
 
@@ -24,12 +24,12 @@ export default class CarService implements Service<Car, CarResponse> {
 
   async create(body: Car): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     if (!Object.keys(body).length) {
-      return { statusCode: 400, body: { message: withoutBody } };
+      return { statusCode: 400, body: { error: withoutBody } };
     }
 
     const { message: isNotValid } = carValidator(body);
 
-    if (isNotValid) return { statusCode: 400, body: { message: isNotValid } };
+    if (isNotValid) return { statusCode: 400, body: { error: isNotValid } };
 
     const createdCar = await this.model.create(body);
 
@@ -45,10 +45,14 @@ export default class CarService implements Service<Car, CarResponse> {
   async readOne(
     id: string,
   ): Promise<HttpResponse<CarResponse | ErrorResponse>> {
+    const { message: isNotValid } = idValidator({ _id: id });
+
+    if (isNotValid) return { statusCode: 400, body: { error: isNotValid } };
+
     const car = await this.model.readOne(id);
 
     if (!car) {
-      return { statusCode: 404, body: { message: carNotFound } };
+      return { statusCode: 404, body: { error: notFound } };
     }
 
     return { statusCode: 200, body: car };
@@ -58,7 +62,7 @@ export default class CarService implements Service<Car, CarResponse> {
     const deletedCar = await this.model.delete(id);
 
     if (!deletedCar) {
-      return { statusCode: 404, body: { message: carNotFound } };
+      return { statusCode: 404, body: { error: notFound } };
     }
 
     return { statusCode: 200, body: deletedCar };
@@ -71,7 +75,7 @@ export default class CarService implements Service<Car, CarResponse> {
     const updatedCar = await this.model.update(id, body);
 
     if (!updatedCar) {
-      return { statusCode: 404, body: { message: carNotFound } };
+      return { statusCode: 404, body: { error: notFound } };
     }
 
     return { statusCode: 200, body: updatedCar };
