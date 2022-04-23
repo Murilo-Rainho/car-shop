@@ -22,10 +22,10 @@ export default class CarRouter {
   }
 
   putsMethods() {
-    this.router.put('/', this.carController.update);
+    this.router.put('/:id', this.carController.update);
   }
 
   deletesMethods() {
-    this.router.delete('/', this.carController.delete);
+    this.router.delete('/:id', this.carController.delete);
   }
 }

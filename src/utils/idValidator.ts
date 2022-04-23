@@ -1,14 +1,13 @@
 import Joi from 'joi';
 
 const idSchema = Joi.object({
-  id: Joi.string().hex().length(24).messages({
-    'string.base': 'Car id must be a string',
-    'string.hex': 'Car id must be a hexadecimal string',
-    'string.length': 'Car id must be 24 characters long',
+  _id: Joi.string().hex().length(24).messages({
+    'string.base': 'Id must be a string',
+    'string.length': 'Id must have 24 hexadecimal characters',
   }),
 });
 
-export default (body: { id: string }) => {
+export default (body: { _id: string }) => {
   const { error } = idSchema.validate(body);
 
   if (error) return { message: error.message };

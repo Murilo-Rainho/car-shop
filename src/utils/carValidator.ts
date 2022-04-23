@@ -1,7 +1,12 @@
 import Joi from 'joi';
-import { Car, CarResponse } from '../interfaces';
+import { Car } from '../interfaces';
 
 const carRequestSchemaObject = {
+  _id: Joi.string().hex().length(24).messages({
+    'string.base': 'Car id must be a string',
+    'string.hex': 'Car id must be a hexadecimal string',
+    'string.length': 'Car id must be 24 characters long',
+  }),
   model: Joi.string().trim().min(3).required()
     .messages({
       'string.base': 'Model must be a string',
@@ -57,25 +62,8 @@ const carRequestSchemaObject = {
 
 const carRequestSchema = Joi.object(carRequestSchemaObject);
 
-const carResponseSchema = Joi.object({
-  ...carRequestSchemaObject,
-  _id: Joi.string().hex().length(24).messages({
-    'string.base': 'Car id must be a string',
-    'string.hex': 'Car id must be a hexadecimal string',
-    'string.length': 'Car id must be 24 characters long',
-  }),
-});
-
-export const carBodyRequest = (body: Car) => {
+export default (body: Car) => {
   const { error } = carRequestSchema.validate(body);
-
-  if (error) return { message: error.message };
-
-  return {};
-};
-
-export const carResponse = (body: CarResponse) => {
-  const { error } = carResponseSchema.validate(body);
 
   if (error) return { message: error.message };
 
