@@ -6,6 +6,7 @@ import {
   Service,
 } from '../interfaces';
 import { CarModel } from '../models';
+import { errorMessages } from '../utils';
 
 export default class CarService implements Service<Car, CarResponse> {
   private $model: CarModel;
@@ -18,7 +19,7 @@ export default class CarService implements Service<Car, CarResponse> {
 
   async create(body: Car): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     if (!body) {
-      return { statusCode: 400, body: { message: 'Has no data in request' } };
+      return { statusCode: 400, body: { message: errorMessages.withoutBody } };
     }
 
     const createdCar = await this.model.create(body);
@@ -38,7 +39,7 @@ export default class CarService implements Service<Car, CarResponse> {
     const car = await this.model.readOne(id);
 
     if (!car) {
-      return { statusCode: 404, body: { message: 'Has no car with this id' } };
+      return { statusCode: 404, body: { message: errorMessages.carNotFound } };
     }
 
     return { statusCode: 200, body: car };
@@ -48,7 +49,7 @@ export default class CarService implements Service<Car, CarResponse> {
     const deletedCar = await this.model.delete(id);
 
     if (!deletedCar) {
-      return { statusCode: 404, body: { message: 'Has no car with this id' } };
+      return { statusCode: 404, body: { message: errorMessages.carNotFound } };
     }
 
     return { statusCode: 200, body: deletedCar };
@@ -61,7 +62,7 @@ export default class CarService implements Service<Car, CarResponse> {
     const updatedCar = await this.model.update(id, body);
 
     if (!updatedCar) {
-      return { statusCode: 404, body: { message: 'Has no car with this id' } };
+      return { statusCode: 404, body: { message: errorMessages.carNotFound } };
     }
 
     return { statusCode: 200, body: updatedCar };
