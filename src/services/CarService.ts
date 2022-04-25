@@ -17,8 +17,10 @@ const {
 export default class CarService implements Service<Car, CarResponse> {
   private $model: Model<Car, CarResponse>;
 
-  constructor() {
-    this.$model = new CarModel();
+  constructor(
+    model: Model<Car, CarResponse> = new CarModel(),
+  ) {
+    this.$model = model;
   }
 
   get model() { return this.$model; }
