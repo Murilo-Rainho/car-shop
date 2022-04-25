@@ -52,11 +52,13 @@ describe('CarController create method', () => {
 
   const mockReq = {} as Request;
   const mockRes = {} as Response;
-  const mockNext: NextFunction = () => {};
+  let mockNext: NextFunction = () => {};
+  const throwError = new Error('something went wrong');
 
   beforeEach(() => {
     mockRes.status = sinon.stub().returns(mockRes);
     mockRes.json = sinon.stub().returns({});
+    mockNext = sinon.stub().returns({});
   });
 
   it('Should return statusCode 201 and a valid body', async () => {
@@ -66,6 +68,16 @@ describe('CarController create method', () => {
     await carController.create(mockReq, mockRes, mockNext);
     expect((mockRes.status as sinon.SinonStub).calledWith(201)).to.be.true;
     expect((mockRes.json as sinon.SinonStub).calledWith(validCar)).to.be.true;
+  });
+
+  it('Should call next error middleware if CarService throws', async () => {
+    mockReq.body = validCar;
+    const { carController, carServiceStub } = factories();
+
+    sinon.stub(carServiceStub, 'create').rejects(throwError);
+
+    await carController.create(mockReq, mockRes, mockNext);
+    expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
   });
 
 });
