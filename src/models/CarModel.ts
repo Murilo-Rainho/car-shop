@@ -11,37 +11,38 @@ const CarSchema = new mongoose.Schema<Car>({
   year: { type: Number, required: true },
 });
 
-export default class CarModel implements Model<Car> {
+export default class CarModel implements Model<Car, CarResponse> {
   constructor(private $model = mongoose.model('Cars', CarSchema)) {}
 
   get model() { return this.$model; }
 
   async create(body: Car): Promise<CarResponse> {
-    const createdCar = await this.model.create(body);
+    const createdCar: CarResponse = await this.model.create(body);
 
     return createdCar;
   }
 
   async read(): Promise<CarResponse[]> {
-    const allCars = await this.model.find();
+    const allCars: CarResponse[] = await this.model.find();
 
     return allCars;
   }
 
   async readOne(id: string): Promise<CarResponse | null> {
-    const car = await this.model.findById(id);
+    const car: CarResponse | null = await this.model.findById(id);
 
     return car;
   }
 
   async delete(id: string): Promise<CarResponse | null> {
-    const deletedCar = await this.model.findByIdAndDelete(id);
+    const deletedCar: CarResponse | null = await this.model
+      .findByIdAndDelete(id);
 
     return deletedCar;
   }
 
   async update(id: string, body: Car): Promise<CarResponse | null> {
-    const updatedCar = await this.model
+    const updatedCar: CarResponse | null = await this.model
       .findByIdAndUpdate(id, body, { new: true });
 
     return updatedCar;
