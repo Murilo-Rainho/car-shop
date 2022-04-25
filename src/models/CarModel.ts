@@ -1,15 +1,20 @@
 import mongoose from 'mongoose';
 import { Car, CarResponse, Model } from '../interfaces';
 
-const CarSchema = new mongoose.Schema<Car>({
-  buyValue: { type: Number, required: true },
-  color: { type: String, required: true },
-  doorsQty: { type: Number, required: true },
-  model: { type: String, required: true },
-  seatsQty: { type: Number, required: true },
-  status: { type: Boolean, required: false },
-  year: { type: Number, required: true },
-});
+const CarSchema = new mongoose.Schema<Car>(
+  {
+    buyValue: { type: Number, required: true },
+    color: { type: String, required: true },
+    doorsQty: { type: Number, required: true },
+    model: { type: String, required: true },
+    seatsQty: { type: Number, required: true },
+    status: { type: Boolean, required: false },
+    year: { type: Number, required: true },
+  },
+  {
+    versionKey: false,
+  },
+);
 
 export default class CarModel implements Model<Car, CarResponse> {
   constructor(private $model = mongoose.model('Cars', CarSchema)) {}
