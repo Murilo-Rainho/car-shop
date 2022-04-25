@@ -137,6 +137,7 @@ describe('CarController readOne method', () => {
   });
 
   it('Should call next error middleware if CarService readOne method throws', async () => {
+    mockReq.params = { id: '1' };
     const { carController, carServiceStub } = factories();
 
     sinon.stub(carServiceStub, 'readOne').rejects(throwError);
@@ -169,6 +170,7 @@ describe('CarController delete method', () => {
   });
 
   it('Should call next error middleware if CarService delete method throws', async () => {
+    mockReq.params = { id: '1' };
     const { carController, carServiceStub } = factories();
 
     sinon.stub(carServiceStub, 'delete').rejects(throwError);
@@ -199,6 +201,17 @@ describe('CarController update method', () => {
     await carController.update(mockReq, mockRes, mockNext);
     expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
     expect((mockRes.json as sinon.SinonStub).calledWith({ ...mockReq.body, _id: updatedId })).to.be.true;
+  });
+
+  it('Should call next error middleware if CarService update method throws', async () => {
+    mockReq.body = validCar;
+    mockReq.params = { id: '1' };
+    const { carController, carServiceStub } = factories();
+
+    sinon.stub(carServiceStub, 'update').rejects(throwError);
+
+    await carController.update(mockReq, mockRes, mockNext);
+    expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
   });
 
 });
