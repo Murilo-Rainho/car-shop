@@ -13,27 +13,27 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 const throwError = new Error('something went wrong');
-const updatedId = new mongoose.Types.ObjectId();
+const newId = new mongoose.Types.ObjectId();
 
 class CarServiceStub implements Service<Car, CarResponse> {
   async create(_body: Car): Promise<HttpResponse<CarResponse | ErrorResponse>> {
-    return { statusCode: 201, body: validCar };
+    return { statusCode: 201, body: { ...validCar, _id: newId } };
   }
 
   async read(): Promise<HttpResponse<CarResponse[]>> {
-    return { statusCode: 200, body: [validCar] };
+    return { statusCode: 200, body: [{ ...validCar, _id: newId }] };
   }
 
   async readOne(_id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
-    return { statusCode: 200, body: validCar };
+    return { statusCode: 200, body: { ...validCar, _id: newId } };
   }
 
   async update(body: Car, _id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
-    return { statusCode: 200, body: { ...body, _id: updatedId } };
+    return { statusCode: 200, body: { ...body, _id: newId } };
   }
 
   async delete(_id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
-    return { statusCode: 200, body: validCar };
+    return { statusCode: 200, body: { ...validCar, _id: newId } };
   }
 }
 
@@ -69,7 +69,7 @@ describe('CarController create method', () => {
 
     await carController.create(mockReq, mockRes, mockNext);
     expect((mockRes.status as sinon.SinonStub).calledWith(201)).to.be.true;
-    expect((mockRes.json as sinon.SinonStub).calledWith(validCar)).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith({ ...validCar, _id: newId })).to.be.true;
   });
 
   it('Should call next error middleware if CarService create method throws', async () => {
@@ -101,7 +101,7 @@ describe('CarController read method', () => {
 
     await carController.read(mockReq, mockRes, mockNext);
     expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
-    expect((mockRes.json as sinon.SinonStub).calledWith([validCar])).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith([{ ...validCar, _id: newId }])).to.be.true;
   });
 
   it('Should call next error middleware if CarService read method throws', async () => {
@@ -133,7 +133,7 @@ describe('CarController readOne method', () => {
 
     await carController.readOne(mockReq, mockRes, mockNext);
     expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
-    expect((mockRes.json as sinon.SinonStub).calledWith(validCar)).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith({ ...validCar, _id: newId })).to.be.true;
   });
 
   it('Should call next error middleware if CarService readOne method throws', async () => {
@@ -166,7 +166,7 @@ describe('CarController delete method', () => {
 
     await carController.delete(mockReq, mockRes, mockNext);
     expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
-    expect((mockRes.json as sinon.SinonStub).calledWith(validCar)).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith({ ...validCar, _id: newId })).to.be.true;
   });
 
   it('Should call next error middleware if CarService delete method throws', async () => {
@@ -200,7 +200,7 @@ describe('CarController update method', () => {
 
     await carController.update(mockReq, mockRes, mockNext);
     expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
-    expect((mockRes.json as sinon.SinonStub).calledWith({ ...mockReq.body, _id: updatedId })).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith({ ...mockReq.body, _id: newId })).to.be.true;
   });
 
   it('Should call next error middleware if CarService update method throws', async () => {

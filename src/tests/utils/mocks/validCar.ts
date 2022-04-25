@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-import { CarResponse } from '../../../interfaces';
+import { Car } from '../../../interfaces';
 
-export const validCar: CarResponse = {
-  _id: new mongoose.Types.ObjectId(),
+export const validCar: Car = {
   model: 'Uno da Escada',
   year: 1963,
   color: 'red',
