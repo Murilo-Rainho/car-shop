@@ -12,6 +12,9 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
+const throwError = new Error('something went wrong');
+const updatedId = new mongoose.Types.ObjectId();
+
 class CarServiceStub implements Service<Car, CarResponse> {
   async create(_body: Car): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     return { statusCode: 201, body: validCar };
@@ -26,7 +29,7 @@ class CarServiceStub implements Service<Car, CarResponse> {
   }
 
   async update(body: Car, _id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
-    return { statusCode: 200, body: { ...body, _id: new mongoose.Types.ObjectId() } };
+    return { statusCode: 200, body: { ...body, _id: updatedId } };
   }
 
   async delete(_id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
@@ -47,8 +50,6 @@ const factories = (): FactoriesTypes => {
     carController,
   };
 };
-
-const throwError = new Error('something went wrong');
 
 describe('CarController create method', () => {
 
@@ -174,6 +175,30 @@ describe('CarController delete method', () => {
 
     await carController.delete(mockReq, mockRes, mockNext);
     expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
+  });
+
+});
+
+describe('CarController update method', () => {
+
+  const mockReq = {} as Request;
+  const mockRes = {} as Response;
+  let mockNext: NextFunction = () => {};
+
+  beforeEach(() => {
+    mockRes.status = sinon.stub().returns(mockRes);
+    mockRes.json = sinon.stub().returns({});
+    mockNext = sinon.stub().returns({});
+  });
+
+  it('Should return statusCode 200 and the updated car', async () => {
+    mockReq.body = validCar;
+    mockReq.params = { id: '1' };
+    const { carController } = factories();
+
+    await carController.update(mockReq, mockRes, mockNext);
+    expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith({ ...mockReq.body, _id: updatedId })).to.be.true;
   });
 
 });
