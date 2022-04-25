@@ -62,7 +62,7 @@ describe('CarController create method', () => {
     mockNext = sinon.stub().returns({});
   });
 
-  it('Should return statusCode 201 and a valid body', async () => {
+  it('Should return statusCode 201 and created car', async () => {
     mockReq.body = validCar;
     const { carController } = factories();
 
@@ -95,7 +95,7 @@ describe('CarController read method', () => {
     mockNext = sinon.stub().returns({});
   });
 
-  it('Should return statusCode 200 and a valid body', async () => {
+  it('Should return statusCode 200 and all created cars', async () => {
     const { carController } = factories();
 
     await carController.read(mockReq, mockRes, mockNext);
