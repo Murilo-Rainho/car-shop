@@ -71,7 +71,7 @@ describe('CarController create method', () => {
     expect((mockRes.json as sinon.SinonStub).calledWith(validCar)).to.be.true;
   });
 
-  it('Should call next error middleware if CarService throws', async () => {
+  it('Should call next error middleware if CarService create method throws', async () => {
     mockReq.body = validCar;
     const { carController, carServiceStub } = factories();
 
@@ -101,6 +101,15 @@ describe('CarController read method', () => {
     await carController.read(mockReq, mockRes, mockNext);
     expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
     expect((mockRes.json as sinon.SinonStub).calledWith([validCar])).to.be.true;
+  });
+
+  it('Should call next error middleware if CarService read method throws', async () => {
+    const { carController, carServiceStub } = factories();
+
+    sinon.stub(carServiceStub, 'read').rejects(throwError);
+
+    await carController.read(mockReq, mockRes, mockNext);
+    expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
   });
 
 });
