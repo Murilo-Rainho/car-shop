@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { Car } from '../../../interfaces';
 
 export const validCar: Car = {
