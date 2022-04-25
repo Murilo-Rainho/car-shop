@@ -48,12 +48,13 @@ const factories = (): FactoriesTypes => {
   };
 };
 
+const throwError = new Error('something went wrong');
+
 describe('CarController create method', () => {
 
   const mockReq = {} as Request;
   const mockRes = {} as Response;
   let mockNext: NextFunction = () => {};
-  const throwError = new Error('something went wrong');
 
   beforeEach(() => {
     mockRes.status = sinon.stub().returns(mockRes);
@@ -78,6 +79,28 @@ describe('CarController create method', () => {
 
     await carController.create(mockReq, mockRes, mockNext);
     expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
+  });
+
+});
+
+describe('CarController read method', () => {
+
+  const mockReq = {} as Request;
+  const mockRes = {} as Response;
+  let mockNext: NextFunction = () => {};
+
+  beforeEach(() => {
+    mockRes.status = sinon.stub().returns(mockRes);
+    mockRes.json = sinon.stub().returns({});
+    mockNext = sinon.stub().returns({});
+  });
+
+  it('Should return statusCode 200 and a valid body', async () => {
+    const { carController } = factories();
+
+    await carController.read(mockReq, mockRes, mockNext);
+    expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith([validCar])).to.be.true;
   });
 
 });
