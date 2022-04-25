@@ -1,14 +1,14 @@
 import { Request as Req, Response as Res, NextFunction as Next } from 'express';
-import { CarResponse, Controller } from '../interfaces';
+import { Car, CarResponse, Controller, Service } from '../interfaces';
 import { CarService } from '../services';
 
 export default class CarController implements Controller<CarResponse> {
   private $route: string;
 
-  private $service: CarService;
+  private $service: Service<Car, CarResponse>;
 
   constructor(
-    service = new CarService(),
+    service: Service<Car, CarResponse> = new CarService(),
     route = '/cars',
   ) {
     this.read = this.read.bind(this);
@@ -32,7 +32,7 @@ export default class CarController implements Controller<CarResponse> {
   ): Promise<Res<CarResponse> | void> {
     try {
       const { body, statusCode } = await this.service.create(req.body);
-  
+
       return res.status(statusCode).json(body);
     } catch (error) {
       next(error);

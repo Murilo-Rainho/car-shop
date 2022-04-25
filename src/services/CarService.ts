@@ -3,6 +3,7 @@ import {
   CarResponse,
   ErrorResponse,
   HttpResponse,
+  Model,
   Service,
 } from '../interfaces';
 import { CarModel } from '../models';
@@ -14,7 +15,7 @@ const {
 } = errorMessages;
 
 export default class CarService implements Service<Car, CarResponse> {
-  private $model: CarModel;
+  private $model: Model<Car, CarResponse>;
 
   constructor() {
     this.$model = new CarModel();
