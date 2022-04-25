@@ -3,13 +3,10 @@ import { Car, CarResponse, Controller, Service } from '../interfaces';
 import { CarService } from '../services';
 
 export default class CarController implements Controller<CarResponse> {
-  private $route: string;
-
   private $service: Service<Car, CarResponse>;
 
   constructor(
     service: Service<Car, CarResponse> = new CarService(),
-    route = '/cars',
   ) {
     this.read = this.read.bind(this);
     this.readOne = this.readOne.bind(this);
@@ -17,11 +14,8 @@ export default class CarController implements Controller<CarResponse> {
     this.create = this.create.bind(this);
     this.update = this.update.bind(this);
 
-    this.$route = route;
     this.$service = service;
   }
-
-  get route() { return this.$route; }
 
   get service() { return this.$service; }
 
