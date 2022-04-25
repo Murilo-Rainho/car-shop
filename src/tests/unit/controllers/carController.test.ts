@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 class CarServiceStub implements Service<Car, CarResponse> {
-  async create(body: Car): Promise<HttpResponse<CarResponse | ErrorResponse>> {
+  async create(_body: Car): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     return { statusCode: 201, body: validCar };
   }
 
@@ -21,15 +21,15 @@ class CarServiceStub implements Service<Car, CarResponse> {
     return { statusCode: 200, body: [validCar] };
   }
 
-  async readOne(id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
+  async readOne(_id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     return { statusCode: 200, body: validCar };
   }
 
-  async update(body: Car, id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
+  async update(body: Car, _id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     return { statusCode: 200, body: { ...body, _id: new mongoose.Types.ObjectId() } };
   }
 
-  async delete(id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
+  async delete(_id: string): Promise<HttpResponse<CarResponse | ErrorResponse>> {
     return { statusCode: 200, body: validCar };
   }
 }
@@ -110,6 +110,29 @@ describe('CarController read method', () => {
 
     await carController.read(mockReq, mockRes, mockNext);
     expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
+  });
+
+});
+
+describe('CarController readOne method', () => {
+
+  const mockReq = {} as Request;
+  const mockRes = {} as Response;
+  let mockNext: NextFunction = () => {};
+
+  beforeEach(() => {
+    mockRes.status = sinon.stub().returns(mockRes);
+    mockRes.json = sinon.stub().returns({});
+    mockNext = sinon.stub().returns({});
+  });
+
+  it('Should return statusCode 200 and the car', async () => {
+    mockReq.params = { id: '1' };
+    const { carController } = factories();
+
+    await carController.readOne(mockReq, mockRes, mockNext);
+    expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith(validCar)).to.be.true;
   });
 
 });
