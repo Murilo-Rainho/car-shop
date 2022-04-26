@@ -89,4 +89,17 @@ describe('CarService create method', () => {
     expect(httpResponse).to.be.eql({ statusCode: 400, body: { error: 'Model is required' } });
   });
 
+  it('Should return statusCode 400 and body with a error message if has a invalid key in request body', async () => {
+    const { model: _model, ...rest } = validCar;
+    const invalidBody = { ...rest, model: 123 } as any;
+    const { carService } = factories();
+
+    const httpResponse = await carService.create(invalidBody);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(400);
+    expect(httpResponse).to.be.eql({ statusCode: 400, body: { error: 'Model must be a string' } });
+  });
+
 });
