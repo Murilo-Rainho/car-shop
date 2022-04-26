@@ -189,4 +189,16 @@ describe('CarService delete method', () => {
     expect(httpResponse).to.be.eql(errors.notFoundResponse);
   });
 
+  it('Should return statusCode 200 and body with a car', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { carService } = factories();
+
+    const httpResponse = await carService.delete(validId);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(204);
+    expect(httpResponse.body).to.be.eql({ ...validCar, _id: newId });
+  });
+
 });
