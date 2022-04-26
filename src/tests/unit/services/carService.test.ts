@@ -64,7 +64,7 @@ describe('CarService create method', () => {
     expect(httpResponse.body).to.be.eql({ ...validCar, _id: newId });
   });
 
-  it('Should return statusCode 400 and body with a error message if has no request body', async () => {
+  it('Should return statusCode 400 and body with an error message if has no request body', async () => {
     const invalidBody = {} as any;
     const { carService } = factories();
 
@@ -76,7 +76,7 @@ describe('CarService create method', () => {
     expect(httpResponse).to.be.eql(errors.invalidBodyResponse);
   });
 
-  it('Should return statusCode 400 and body with a error message if has missing any key in request body', async () => {
+  it('Should return statusCode 400 and body with an error message if has missing any key in request body', async () => {
     const { model: _model, ...rest } = validCar;
     const invalidBody = { ...rest } as any;
     const { carService } = factories();
@@ -89,7 +89,7 @@ describe('CarService create method', () => {
     expect(httpResponse).to.be.eql({ statusCode: 400, body: { error: 'Model is required' } });
   });
 
-  it('Should return statusCode 400 and body with a error message if has a invalid key in request body', async () => {
+  it('Should return statusCode 400 and body with an error message if has a invalid key in request body', async () => {
     const { model: _model, ...rest } = validCar;
     const invalidBody = { ...rest, model: 123 } as any;
     const { carService } = factories();
@@ -115,6 +115,22 @@ describe('CarService read method', () => {
     expect(httpResponse).to.have.property('body');
     expect(httpResponse.statusCode).to.be.eql(200);
     expect(httpResponse.body).to.be.eql([{ ...validCar, _id: newId }]);
+  });
+
+});
+
+describe('CarService readOne method', () => {
+
+  it('Should return statusCode 400 and body with an error message if has a invalid id request parameter', async () => {
+    const invalidId = null as any;
+    const { carService } = factories();
+
+    const httpResponse = await carService.readOne(invalidId);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(400);
+    expect(httpResponse).to.be.eql({ statusCode: 400, body: { error: 'Id must be a string' } });
   });
 
 });
