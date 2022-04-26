@@ -4,9 +4,9 @@ import * as sinon from 'sinon';
 import mongoose from 'mongoose';
 
 import { CarService } from '../../../services';
-import { Car, CarResponse, ErrorResponse, HttpResponse, Model } from '../../../interfaces';
+import { Car, CarResponse, Model } from '../../../interfaces';
 import { validCar } from '../../utils/mocks';
-import { NextFunction, Request, Response } from 'express';
+import { errors } from '../../../utils';
 
 chai.use(chaiHttp);
 
@@ -62,6 +62,31 @@ describe('CarService create method', () => {
     expect(httpResponse).to.have.property('body');
     expect(httpResponse.statusCode).to.be.eql(201);
     expect(httpResponse.body).to.be.eql({ ...validCar, _id: newId });
+  });
+
+  it('Should return statusCode 400 and body with a error message if has no request body', async () => {
+    const invalidBody = {} as any;
+    const { carService } = factories();
+
+    const httpResponse = await carService.create(invalidBody);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(400);
+    expect(httpResponse).to.be.eql(errors.invalidBodyResponse);
+  });
+
+  it('Should return statusCode 400 and body with a error message if has missing any key in request body', async () => {
+    const { model: _model, ...rest } = validCar;
+    const invalidBody = { ...rest } as any;
+    const { carService } = factories();
+
+    const httpResponse = await carService.create(invalidBody);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(400);
+    expect(httpResponse).to.be.eql({ statusCode: 400, body: { error: 'Model is required' } });
   });
 
 });
