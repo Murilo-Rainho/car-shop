@@ -52,9 +52,7 @@ export default class CarService implements Service<Car, CarResponse> {
 
     const car = await this.model.readOne(id);
 
-    if (!car) {
-      return notFoundResponse;
-    }
+    if (!car) return notFoundResponse;
 
     return { statusCode: 200, body: car };
   }
