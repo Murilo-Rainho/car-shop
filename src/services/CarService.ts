@@ -79,9 +79,7 @@ export default class CarService implements Service<Car, CarResponse> {
 
     const updatedCar = await this.model.update(id, body);
 
-    if (!updatedCar) {
-      return notFoundResponse;
-    }
+    if (!updatedCar) return notFoundResponse;
 
     return { statusCode: 200, body: updatedCar };
   }
