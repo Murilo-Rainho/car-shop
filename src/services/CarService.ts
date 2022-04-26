@@ -7,12 +7,12 @@ import {
   Service,
 } from '../interfaces';
 import { CarModel } from '../models';
-import { carValidator, errorMessages, idValidator } from '../utils';
+import { carValidator, errors, idValidator } from '../utils';
 
 const {
-  notFound,
-  withoutBody,
-} = errorMessages;
+  notFoundResponse,
+  invalidBodyResponse,
+} = errors;
 
 export default class CarService implements Service<Car, CarResponse> {
   private $model: Model<Car, CarResponse>;
@@ -26,9 +26,7 @@ export default class CarService implements Service<Car, CarResponse> {
   get model() { return this.$model; }
 
   async create(body: Car): Promise<HttpResponse<CarResponse | ErrorResponse>> {
-    if (!Object.keys(body).length) {
-      return { statusCode: 400, body: { error: withoutBody } };
-    }
+    if (!Object.keys(body).length) return invalidBodyResponse;
 
     const { message: isNotValid } = carValidator(body);
 
@@ -55,7 +53,7 @@ export default class CarService implements Service<Car, CarResponse> {
     const car = await this.model.readOne(id);
 
     if (!car) {
-      return { statusCode: 404, body: { error: notFound } };
+      return notFoundResponse;
     }
 
     return { statusCode: 200, body: car };
@@ -69,7 +67,7 @@ export default class CarService implements Service<Car, CarResponse> {
     const deletedCar = await this.model.delete(id);
 
     if (!deletedCar) {
-      return { statusCode: 404, body: { error: notFound } };
+      return notFoundResponse;
     }
 
     return { statusCode: 204, body: deletedCar };
@@ -86,7 +84,7 @@ export default class CarService implements Service<Car, CarResponse> {
     const updatedCar = await this.model.update(id, body);
 
     if (!updatedCar) {
-      return { statusCode: 404, body: { error: notFound } };
+      return notFoundResponse;
     }
 
     return { statusCode: 200, body: updatedCar };
