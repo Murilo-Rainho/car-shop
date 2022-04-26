@@ -64,9 +64,7 @@ export default class CarService implements Service<Car, CarResponse> {
 
     const deletedCar = await this.model.delete(id);
 
-    if (!deletedCar) {
-      return notFoundResponse;
-    }
+    if (!deletedCar) return notFoundResponse;
 
     return { statusCode: 204, body: deletedCar };
   }
