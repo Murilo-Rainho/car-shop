@@ -1,2 +1,2 @@
-export { default as CarModel } from './CarModel';
+export * from './CarModel';
 export const lint = () => {};

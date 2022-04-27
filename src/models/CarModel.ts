@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { Car, CarResponse, Model } from '../interfaces';
 
-const CarSchema = new mongoose.Schema<Car>(
+export const CarSchema = new mongoose.Schema<Car>(
   {
     buyValue: { type: Number, required: true },
     color: { type: String, required: true },
@@ -16,7 +16,7 @@ const CarSchema = new mongoose.Schema<Car>(
   },
 );
 
-export default class CarModel implements Model<CarResponse> {
+export class CarModel implements Model<CarResponse> {
   constructor(private $model = mongoose.model('Cars', CarSchema)) {}
 
   get model() { return this.$model; }
