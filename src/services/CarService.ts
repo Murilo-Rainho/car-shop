@@ -15,10 +15,10 @@ const {
 } = errors;
 
 export default class CarService implements Service<Car, CarResponse> {
-  private $model: Model<Car, CarResponse>;
+  private $model: Model<CarResponse>;
 
   constructor(
-    model: Model<Car, CarResponse> = new CarModel(),
+    model: Model<CarResponse> = new CarModel(),
   ) {
     this.$model = model;
   }

@@ -16,7 +16,7 @@ const CarSchema = new mongoose.Schema<Car>(
   },
 );
 
-export default class CarModel implements Model<Car, CarResponse> {
+export default class CarModel implements Model<CarResponse> {
   constructor(private $model = mongoose.model('Cars', CarSchema)) {}
 
   get model() { return this.$model; }

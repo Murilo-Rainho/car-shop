@@ -15,7 +15,7 @@ const { expect } = chai;
 const throwError = new Error('something went wrong');
 const newId = new mongoose.Types.ObjectId();
 
-class CarModelStub implements Model<Car, CarResponse> {
+class CarModelStub implements Model<CarResponse> {
   async create(payload: Car): Promise<CarResponse> {
     return { ...payload, _id: newId };
   }
