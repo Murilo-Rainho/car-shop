@@ -45,6 +45,8 @@ describe('CarModel create method', () => {
     expect(createdCar).to.have.property('seatsQty');
     expect(createdCar).to.have.property('doorsQty');
     expect(createdCar).to.have.property('_id');
+
+    (mongooseModel.create as any).restore();
   });
 
 });
@@ -65,17 +67,19 @@ describe('CarModel read method', () => {
     expect(car).to.have.property('seatsQty');
     expect(car).to.have.property('doorsQty');
     expect(car).to.have.property('_id');
+
+    (mongooseModel.find as any).restore();
   });
 
 });
 
 describe('CarModel readOne method', () => {
 
-  it('Should return the car', async () => {
+  it('Should return the car if all goes well', async () => {
     const validId = '62644a7a0ae3be566e672f14';
     const { carModel, mongooseModel } = factories();
 
-    sinon.stub(mongooseModel, 'findOne').resolves({ ...validCar, _id: newId } as any);
+    sinon.stub(mongooseModel, 'findById').resolves({ ...validCar, _id: newId } as any);
 
     const car = await carModel.readOne(validId);
     
@@ -86,6 +90,21 @@ describe('CarModel readOne method', () => {
     expect(car).to.have.property('seatsQty');
     expect(car).to.have.property('doorsQty');
     expect(car).to.have.property('_id');
+
+    (mongooseModel.findById as any).restore();
+  });
+
+  it('Should return the null if has no car with this id', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { carModel, mongooseModel } = factories();
+
+    sinon.stub(mongooseModel, 'findById').resolves(null);
+
+    const carNotFound = await carModel.readOne(validId);
+    
+    expect(carNotFound).to.be.null;
+
+    (mongooseModel.findById as any).restore();
   });
 
 });
