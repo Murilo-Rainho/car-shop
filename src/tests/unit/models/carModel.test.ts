@@ -144,3 +144,26 @@ describe('CarModel delete method', () => {
   });
 
 });
+
+describe('CarModel update method', () => {
+
+  it('Should return the car if all goes well', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { carModel, mongooseModel } = factories();
+
+    sinon.stub(mongooseModel, 'findByIdAndUpdate').resolves({ ...validCar, _id: newId } as any);
+
+    const car = await carModel.update(validId, validCar);
+    
+    expect(car).to.have.property('model');
+    expect(car).to.have.property('year');
+    expect(car).to.have.property('color');
+    expect(car).to.have.property('buyValue');
+    expect(car).to.have.property('seatsQty');
+    expect(car).to.have.property('doorsQty');
+    expect(car).to.have.property('_id');
+
+    (mongooseModel.findByIdAndUpdate as any).restore();
+  });
+
+});
