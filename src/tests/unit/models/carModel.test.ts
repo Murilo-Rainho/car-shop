@@ -130,4 +130,17 @@ describe('CarModel delete method', () => {
     (mongooseModel.findByIdAndDelete as any).restore();
   });
 
+  it('Should return the null if has no car with this id', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { carModel, mongooseModel } = factories();
+
+    sinon.stub(mongooseModel, 'findByIdAndDelete').resolves(null);
+
+    const carNotFound = await carModel.delete(validId);
+    
+    expect(carNotFound).to.be.null;
+
+    (mongooseModel.findByIdAndDelete as any).restore();
+  });
+
 });
