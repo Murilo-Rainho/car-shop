@@ -1,2 +1,2 @@
 export { default as CarController } from './CarController';
-export const lint = () => {};
+export { default as MotorcycleController } from './MotorcycleController';
