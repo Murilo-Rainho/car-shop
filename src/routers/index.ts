@@ -1,2 +1,2 @@
 export { default as CarRouter } from './CarRouter';
-export const lint = () => {};
+export { default as MotorcycleRouter } from './MotorcycleRouter';

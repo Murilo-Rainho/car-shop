@@ -1,12 +1,13 @@
 import express from 'express';
 import connectToDatabase from './connection';
-import { CarRouter } from './routers';
+import { CarRouter, MotorcycleRouter } from './routers';
 
 class App {
   public app: express.Application;
 
   constructor(
     private carRouter = new CarRouter(),
+    private motorcycleRouter = new MotorcycleRouter(),
   ) {
     this.app = express();
     this.app.use(express.json());
@@ -25,6 +26,7 @@ class App {
 
   public addRouters() {
     this.app.use('/cars', this.carRouter.router);
+    this.app.use('/motorcycles', this.motorcycleRouter.router);
   }
 
   public getApp() {
