@@ -165,4 +165,17 @@ describe('MotorcycleModel update method', () => {
     (mongooseModel.findByIdAndUpdate as any).restore();
   });
 
+  it('Should return the null if has no motorcycle with this id', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { motorcycleModel, mongooseModel } = factories();
+
+    sinon.stub(mongooseModel, 'findByIdAndUpdate').resolves(null);
+
+    const motorcycleNotFound = await motorcycleModel.update(validId, validMotorcycle);
+    
+    expect(motorcycleNotFound).to.be.null;
+
+    (mongooseModel.findByIdAndUpdate as any).restore();
+  });
+
 });
