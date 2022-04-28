@@ -49,3 +49,25 @@ describe('MotorcycleModel create method', () => {
   });
 
 });
+
+describe('MotorcycleModel read method', () => {
+
+  it('Should return all motorcycles if all goes well', async () => {
+    const { motorcycleModel, mongooseModel } = factories();
+
+    sinon.stub(mongooseModel, 'find').resolves([{ ...validMotorcycle, _id: newId }] as any[]);
+
+    const [motorcycle] = await motorcycleModel.read();
+    
+    expect(motorcycle).to.have.property('model');
+    expect(motorcycle).to.have.property('year');
+    expect(motorcycle).to.have.property('color');
+    expect(motorcycle).to.have.property('buyValue');
+    expect(motorcycle).to.have.property('category');
+    expect(motorcycle).to.have.property('engineCapacity');
+    expect(motorcycle).to.have.property('_id');
+
+    (mongooseModel.find as any).restore();
+  });
+
+});
