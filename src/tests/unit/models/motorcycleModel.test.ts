@@ -107,3 +107,26 @@ describe('MotorcycleModel readOne method', () => {
   });
 
 });
+
+describe('MotorcycleMode delete method', () => {
+
+  it('Should return the motorcycle if all goes well', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { motorcycleModel, mongooseModel } = factories();
+
+    sinon.stub(mongooseModel, 'findByIdAndDelete').resolves({ ...validMotorcycle, _id: newId } as any);
+
+    const motorcycle = await motorcycleModel.delete(validId);
+    
+    expect(motorcycle).to.have.property('model');
+    expect(motorcycle).to.have.property('year');
+    expect(motorcycle).to.have.property('color');
+    expect(motorcycle).to.have.property('buyValue');
+    expect(motorcycle).to.have.property('category');
+    expect(motorcycle).to.have.property('engineCapacity');
+    expect(motorcycle).to.have.property('_id');
+
+    (mongooseModel.findByIdAndDelete as any).restore();
+  });
+
+});
