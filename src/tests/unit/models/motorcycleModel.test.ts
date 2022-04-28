@@ -93,4 +93,17 @@ describe('MotorcycleModel readOne method', () => {
     (mongooseModel.findById as any).restore();
   });
 
+  it('Should return the null if has no motorcycle with this id', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { motorcycleModel, mongooseModel } = factories();
+
+    sinon.stub(mongooseModel, 'findById').resolves(null);
+
+    const motorcycleNotFound = await motorcycleModel.readOne(validId);
+    
+    expect(motorcycleNotFound).to.be.null;
+
+    (mongooseModel.findById as any).restore();
+  });
+
 });
