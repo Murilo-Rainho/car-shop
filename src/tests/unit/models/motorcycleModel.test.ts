@@ -129,4 +129,17 @@ describe('MotorcycleMode delete method', () => {
     (mongooseModel.findByIdAndDelete as any).restore();
   });
 
+  it('Should return the null if has no motorcycle with this id', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { motorcycleModel, mongooseModel } = factories();
+
+    sinon.stub(mongooseModel, 'findByIdAndDelete').resolves(null);
+
+    const motorcycleNotFound = await motorcycleModel.delete(validId);
+    
+    expect(motorcycleNotFound).to.be.null;
+
+    (mongooseModel.findByIdAndDelete as any).restore();
+  });
+
 });
