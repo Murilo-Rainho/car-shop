@@ -1,5 +1,7 @@
 export * from './CarInterface';
 export * from './CarResponseInterface';
+export * from './MotorcycleInterface';
+export * from './MotorcycleResponseInterface';
 export * from './ControllerInterface';
 export * from './HttpResponse';
 export * from './ModelInterface';
