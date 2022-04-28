@@ -71,3 +71,26 @@ describe('MotorcycleModel read method', () => {
   });
 
 });
+
+describe('MotorcycleModel readOne method', () => {
+
+  it('Should return the motorcycle if all goes well', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { motorcycleModel, mongooseModel } = factories();
+
+    sinon.stub(mongooseModel, 'findById').resolves({ ...validMotorcycle, _id: newId } as any);
+
+    const car = await motorcycleModel.readOne(validId);
+    
+    expect(car).to.have.property('model');
+    expect(car).to.have.property('year');
+    expect(car).to.have.property('color');
+    expect(car).to.have.property('buyValue');
+    expect(car).to.have.property('category');
+    expect(car).to.have.property('engineCapacity');
+    expect(car).to.have.property('_id');
+
+    (mongooseModel.findById as any).restore();
+  });
+
+});
