@@ -1,2 +1,2 @@
 export { default as CarService } from './CarService';
-export const lint = () => {};
+export { default as MotorcycleService } from './MotorcycleService';
