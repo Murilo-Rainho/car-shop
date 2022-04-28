@@ -1,11 +1,10 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import * as sinon from 'sinon';
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 
-import { Car, CarResponse } from '../../../interfaces';
+import { Car } from '../../../interfaces';
 import { validCar } from '../../utils/mocks';
-import { errors } from '../../../utils';
 import { CarModel, CarSchema } from '../../../models';
 
 chai.use(chaiHttp);
