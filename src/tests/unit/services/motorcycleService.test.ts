@@ -64,4 +64,16 @@ describe('MotorcycleService create method', () => {
     expect(httpResponse.body).to.be.eql({ ...validMotorcycle, _id: newId });
   });
 
+  it('Should return statusCode 400 and body with an error message if has no request body', async () => {
+    const invalidBody = {} as any;
+    const { motorcycleService } = factories();
+
+    const httpResponse = await motorcycleService.create(invalidBody);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(400);
+    expect(httpResponse).to.be.eql(errors.invalidBodyResponse);
+  });
+
 });
