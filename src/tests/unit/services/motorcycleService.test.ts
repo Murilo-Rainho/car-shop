@@ -103,3 +103,18 @@ describe('MotorcycleService create method', () => {
   });
 
 });
+
+describe('MotorcycleService read method', () => {
+
+  it('Should return statusCode 200 and body with all motorcycles', async () => {
+    const { motorcycleService } = factories();
+
+    const httpResponse = await motorcycleService.read();
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(200);
+    expect(httpResponse.body).to.be.eql([{ ...validMotorcycle, _id: newId }]);
+  });
+
+});
