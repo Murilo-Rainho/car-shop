@@ -72,4 +72,14 @@ describe('MotorcycleController create method', () => {
     expect((mockRes.json as sinon.SinonStub).calledWith({ ...validMotorcycle, _id: newId })).to.be.true;
   });
 
+  it('Should call next error middleware if CarService create method throws', async () => {
+    mockReq.body = validMotorcycle;
+    const { motorcycleController, motorcycleServiceStub } = factories();
+
+    sinon.stub(motorcycleServiceStub, 'create').rejects(throwError);
+
+    await motorcycleController.create(mockReq, mockRes, mockNext);
+    expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
+  });
+
 });
