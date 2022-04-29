@@ -180,3 +180,27 @@ describe('MotorcycleController delete method', () => {
   });
 
 });
+
+describe('MotorcycleController update method', () => {
+
+  const mockReq = {} as Request;
+  const mockRes = {} as Response;
+  let mockNext: NextFunction = () => {};
+
+  beforeEach(() => {
+    mockRes.status = sinon.stub().returns(mockRes);
+    mockRes.json = sinon.stub().returns({});
+    mockNext = sinon.stub().returns({});
+  });
+
+  it('Should return statusCode 200 and the updated car', async () => {
+    mockReq.body = validMotorcycle;
+    mockReq.params = { id: '1' };
+    const { motorcycleController } = factories();
+
+    await motorcycleController.update(mockReq, mockRes, mockNext);
+    expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith({ ...mockReq.body, _id: newId })).to.be.true;
+  });
+
+});
