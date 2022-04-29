@@ -83,3 +83,25 @@ describe('MotorcycleController create method', () => {
   });
 
 });
+
+describe('MotorcycleController read method', () => {
+
+  const mockReq = {} as Request;
+  const mockRes = {} as Response;
+  let mockNext: NextFunction = () => {};
+
+  beforeEach(() => {
+    mockRes.status = sinon.stub().returns(mockRes);
+    mockRes.json = sinon.stub().returns({});
+    mockNext = sinon.stub().returns({});
+  });
+
+  it('Should return statusCode 200 and all created cars', async () => {
+    const { motorcycleController } = factories();
+
+    await motorcycleController.read(mockReq, mockRes, mockNext);
+    expect((mockRes.status as sinon.SinonStub).calledWith(200)).to.be.true;
+    expect((mockRes.json as sinon.SinonStub).calledWith([{ ...validMotorcycle, _id: newId }])).to.be.true;
+  });
+
+});
