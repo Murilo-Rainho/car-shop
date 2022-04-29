@@ -169,4 +169,14 @@ describe('MotorcycleController delete method', () => {
     expect((mockRes.json as sinon.SinonStub).calledWith({ ...validMotorcycle, _id: newId })).to.be.true;
   });
 
+  it('Should call next error middleware if CarService delete method throws', async () => {
+    mockReq.params = { id: '1' };
+    const { motorcycleController, motorcycleServiceStub } = factories();
+
+    sinon.stub(motorcycleServiceStub, 'delete').rejects(throwError);
+
+    await motorcycleController.delete(mockReq, mockRes, mockNext);
+    expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
+  });
+
 });
