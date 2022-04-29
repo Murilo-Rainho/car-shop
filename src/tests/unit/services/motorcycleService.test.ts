@@ -160,3 +160,19 @@ describe('MotorcycleService readOne method', () => {
   });
 
 });
+
+describe('MotorcycleService delete method', () => {
+
+  it('Should return statusCode 400 and body with an error message if has a invalid id request parameter', async () => {
+    const invalidId = null as any;
+    const { motorcycleService } = factories();
+
+    const httpResponse = await motorcycleService.delete(invalidId);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(400);
+    expect(httpResponse).to.be.eql({ statusCode: 400, body: { error: 'Id must be a string' } });
+  });
+
+});
