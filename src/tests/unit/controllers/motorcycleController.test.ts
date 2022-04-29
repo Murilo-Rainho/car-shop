@@ -104,4 +104,13 @@ describe('MotorcycleController read method', () => {
     expect((mockRes.json as sinon.SinonStub).calledWith([{ ...validMotorcycle, _id: newId }])).to.be.true;
   });
 
+  it('Should call next error middleware if CarService read method throws', async () => {
+    const { motorcycleController, motorcycleServiceStub } = factories();
+
+    sinon.stub(motorcycleServiceStub, 'read').rejects(throwError);
+
+    await motorcycleController.read(mockReq, mockRes, mockNext);
+    expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
+  });
+
 });
