@@ -76,4 +76,17 @@ describe('MotorcycleService create method', () => {
     expect(httpResponse).to.be.eql(errors.invalidBodyResponse);
   });
 
+  it('Should return statusCode 400 and body with an error message if has missing any key in request body', async () => {
+    const { model: _model, ...rest } = validMotorcycle;
+    const invalidBody = { ...rest } as any;
+    const { motorcycleService } = factories();
+
+    const httpResponse = await motorcycleService.create(invalidBody);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(400);
+    expect(httpResponse).to.be.eql({ statusCode: 400, body: { error: 'Model is required' } });
+  });
+
 });
