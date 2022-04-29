@@ -203,4 +203,15 @@ describe('MotorcycleController update method', () => {
     expect((mockRes.json as sinon.SinonStub).calledWith({ ...mockReq.body, _id: newId })).to.be.true;
   });
 
+  it('Should call next error middleware if CarService update method throws', async () => {
+    mockReq.body = validMotorcycle;
+    mockReq.params = { id: '1' };
+    const { motorcycleController, motorcycleServiceStub } = factories();
+
+    sinon.stub(motorcycleServiceStub, 'update').rejects(throwError);
+
+    await motorcycleController.update(mockReq, mockRes, mockNext);
+    expect((mockNext as sinon.SinonStub).calledWith(throwError)).to.be.true;
+  });
+
 });
