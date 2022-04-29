@@ -175,4 +175,18 @@ describe('MotorcycleService delete method', () => {
     expect(httpResponse).to.be.eql({ statusCode: 400, body: { error: 'Id must be a string' } });
   });
 
+  it('Should return statusCode 404 and body with an error message if has no motorcycle with this id', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { motorcycleService, motorcycleModelStub } = factories();
+
+    sinon.stub(motorcycleModelStub, 'delete').resolves(null);
+
+    const httpResponse = await motorcycleService.delete(validId);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(404);
+    expect(httpResponse).to.be.eql(errors.notFoundResponse);
+  });
+
 });
