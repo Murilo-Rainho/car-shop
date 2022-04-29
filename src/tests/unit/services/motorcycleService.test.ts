@@ -147,4 +147,16 @@ describe('MotorcycleService readOne method', () => {
     expect(httpResponse).to.be.eql(errors.notFoundResponse);
   });
 
+  it('Should return statusCode 200 and body with a motorcycle', async () => {
+    const validId = '62644a7a0ae3be566e672f14';
+    const { motorcycleService } = factories();
+
+    const httpResponse = await motorcycleService.readOne(validId);
+    
+    expect(httpResponse).to.have.property('statusCode');
+    expect(httpResponse).to.have.property('body');
+    expect(httpResponse.statusCode).to.be.eql(200);
+    expect(httpResponse.body).to.be.eql({ ...validMotorcycle, _id: newId });
+  });
+
 });
